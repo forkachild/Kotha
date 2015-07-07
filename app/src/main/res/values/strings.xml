@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Kotha</string>
+    <string name="title_activity_chat">Kotha</string>
+    <string name="action_settings">Settings</string>
+</resources>
