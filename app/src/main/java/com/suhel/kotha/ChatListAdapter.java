@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -61,21 +60,14 @@ public class ChatListAdapter extends BaseAdapter {
         ViewHolder theHolder;
         ListItem theItem = chatMessages.get(position);
 
-        if(convertView == null) {
+        theHolder = new ViewHolder();
 
-            theHolder = new ViewHolder();
-
-            if (theItem.direction)
-                convertView = chatInflater.inflate(R.layout.chat_message_me, parent, false);
-            else
-                convertView = chatInflater.inflate(R.layout.chat_message_you, parent, false);
-
-            theHolder.tvText = (TextView) convertView.findViewById(R.id.theText);
-
-            convertView.setTag(theHolder);
-        }
+        if (theItem.direction)
+            convertView = chatInflater.inflate(R.layout.chat_message_me, parent, false);
         else
-            theHolder = (ViewHolder) convertView.getTag();
+            convertView = chatInflater.inflate(R.layout.chat_message_you, parent, false);
+
+        theHolder.tvText = (TextView) convertView.findViewById(R.id.theText);
 
         theHolder.tvText.setTypeface(roboto);
         theHolder.tvText.setText(theItem.text);

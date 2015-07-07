@@ -6,7 +6,6 @@
     tools:context="com.suhel.kotha.ChatActivity">
 
     <ListView
-        android:paddingTop="10dp"
         android:id="@+id/chatList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -23,11 +22,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/chatList"
+        android:background="#99FFFFFF"
+        android:paddingTop="5dp"
         android:orientation="horizontal">
 
         <EditText
             android:id="@+id/txtText"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="0dp"
+            android:scrollbarStyle="outsideInset"
+            android:textColor="#AA000000"
+            android:background="@drawable/text_box"
+            android:hint="Message"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:layout_height="match_parent"
             android:layout_weight="0.8" />
 
