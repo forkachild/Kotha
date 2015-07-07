@@ -23,7 +23,7 @@ public class ChatListAdapter extends BaseAdapter {
     public ChatListAdapter(Context context) {
         chatInflater = LayoutInflater.from(context);
         chatMessages = new ArrayList<ListItem>();
-        roboto = Typeface.createFromAsset(context.getAssets(), "roboto-light.ttf");
+        roboto = Typeface.createFromAsset(context.getAssets(), "roboto-medium.ttf");
     }
 
     public void add(ListItem object) {

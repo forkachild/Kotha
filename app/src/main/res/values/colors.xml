@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="color_primary">#009688</color>
-    <color name="color_primary_dark">#00796B</color>
-    <color name="color_accent">#F44336</color>
+    <color name="color_primary">#607D8B</color>
+    <color name="color_primary_dark">#455A64</color>
+    <color name="color_accent">#000000</color>
 
-    <color name="chat_text">#A8FFFFFF</color>
+    <color name="chat_text">#A8000000</color>
 
 </resources>
