@@ -1,83 +1,177 @@
 package com.suhel.kotha;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.parse.LogInCallback;
+import com.parse.LogOutCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements BaseCallback {
 
     private ListView lvChatList;
     private ChatListAdapter lst;
     private EditText txtText;
     private Button bSend;
+    private ConversationFragment fragConv;
+    private LoginFragment fragLogin;
+    private SignupFragment fragSignup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_chat);
 
-        lvChatList = (ListView) findViewById(R.id.chatList);
-        txtText = (EditText) findViewById(R.id.txtText);
-        bSend = (Button) findViewById(R.id.bSend);
+        if (ParseUser.getCurrentUser() != null) {
 
-        Typeface roboto = Typeface.createFromAsset(getAssets(), "roboto-light.ttf");
-        bSend.setTypeface(roboto);
-        txtText.setTypeface(roboto);
+            if (fragConv == null)
+                fragConv = new ConversationFragment();
+            loadFragment(fragConv, ParseUser.getCurrentUser().getString("firstName"));
 
-        lst = new ChatListAdapter(this);
-        lst.add(new ListItem("Ki kortesos?", false));
-        lst.add(new ListItem("Baal chirchi ar ki", true));
-        lst.add(new ListItem(":P", true));
-        lst.add(new ListItem("Really? Kal i to shave korli?", false));
-        lst.add(new ListItem("Tweezer diye chirte hoche... XD", false));
-        lst.add(new ListItem("?", false));
-        lst.add(new ListItem("Na... Kajer lok on the knees... Baal job diche...", true));
-        lst.add(new ListItem(":P", true));
-        lst.add(new ListItem("Interesting... So bogol job tao koriye nis...", false));
-        lst.add(new ListItem("Bogol ta agun diyei korbo bhabchi... Nahole mohila tar nak e chul dhuke bogol e heche debe", true));
-        lst.add(new ListItem("OH LOOORD... YOU KILL ME... XD", false));
-        lst.add(new ListItem("ikr... :P", true));
-        lst.add(new ListItem("CIgarette patha to ekta...", false));
-        lst.add(new ListItem("Brishti te jete jete bhije jabe", true));
-        lst.add(new ListItem("Light er speed e ashbe to...", false));
-        lst.add(new ListItem("Oto speed e tamak chitke jabe...", true));
-        lst.add(new ListItem("Tamak er guarantee deyena cigarette er company... Amio debona... :P", false));
-        lvChatList.setAdapter(lst);
-
-        bSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                lst.add(new ListItem(txtText.getText().toString(), true));
-                txtText.setText("");
-                lvChatList.setAdapter(lst);
-                scrollToBottom();
-            }
-        });
-        bSend.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                lst.add(new ListItem(txtText.getText().toString(), false));
-                txtText.setText("");
-                lvChatList.setAdapter(lst);
-                scrollToBottom();
-                return true;
-            }
-        });
+        } else {
+            fragLogin = new LoginFragment();
+            loadFragment(fragLogin, null);
+        }
 
     }
 
-    private void scrollToBottom() {
-        lvChatList.post(new Runnable() {
+    @Override
+    public void actionTitle(String title, String subTitle) {
+        getSupportActionBar().setTitle(title);
+        if (subTitle != null)
+            getSupportActionBar().setSubtitle(subTitle);
+        else
+            getSupportActionBar().setSubtitle(null);
+    }
+
+    @Override
+    public void loadSignup() {
+        if (fragSignup == null)
+            fragSignup = new SignupFragment();
+        loadFragment(fragSignup, null);
+    }
+
+    @Override
+    public void loadLogin() {
+        if (fragLogin == null)
+            fragLogin = new LoginFragment();
+        loadFragment(fragLogin, null);
+    }
+
+    @Override
+    public void signup(String firstName, String lastName, String userName, String password, String email) {
+        ParseUser newUser = new ParseUser();
+        newUser.setUsername(userName);
+        newUser.setPassword(password);
+        newUser.setEmail(email);
+        newUser.put("firstName", firstName);
+        newUser.put("lastName", lastName);
+
+        newUser.signUpInBackground(new SignUpCallback() {
+
             @Override
-            public void run() {
-                // Select the last row so it will scroll into view...
-                lvChatList.setSelection(lst.getCount() - 1);
+            public void done(ParseException e) {
+                if (e == null) {
+
+                    if (fragConv == null)
+                        fragConv = new ConversationFragment();
+                    loadFragment(fragConv, ParseUser.getCurrentUser().getString("firstName"));
+
+                } else {
+                    switch (e.getCode()) {
+
+                        case ParseException.USERNAME_TAKEN:
+
+                            Toast.makeText(ChatActivity.this, "Username already registered", Toast.LENGTH_LONG).show();
+                            break;
+
+                        case ParseException.EMAIL_TAKEN:
+
+                            Toast.makeText(ChatActivity.this, "Email already registered", Toast.LENGTH_LONG).show();
+                            break;
+
+                        case ParseException.INVALID_EMAIL_ADDRESS:
+
+                            Toast.makeText(ChatActivity.this, "Email is invalid", Toast.LENGTH_LONG).show();
+                            break;
+
+                        default:
+
+                            Toast.makeText(ChatActivity.this, "Unknown error", Toast.LENGTH_LONG).show();
+                            break;
+
+                    }
+                }
+
             }
+
         });
+    }
+
+    @Override
+    public void login(String username, String password) {
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
+
+            @Override
+            public void done(ParseUser parseUser, ParseException e) {
+                if (e == null) {
+
+                    if (fragConv == null)
+                        fragConv = new ConversationFragment();
+                    loadFragment(fragConv, ParseUser.getCurrentUser().getString("firstName"));
+
+                } else {
+                    switch (e.getCode()) {
+
+                        case ParseException.USERNAME_MISSING:
+
+                            Toast.makeText(ChatActivity.this, "Username invalid", Toast.LENGTH_LONG).show();
+                            break;
+
+                    }
+                }
+            }
+
+        });
+    }
+
+    @Override
+    public void logout() {
+        ParseUser.logOutInBackground(new LogOutCallback() {
+
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    if (fragLogin == null)
+                        fragLogin = new LoginFragment();
+                    loadFragment(fragLogin, null);
+                } else {
+                    Toast.makeText(ChatActivity.this, "Problem logging out", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        });
+    }
+
+    private void loadFragment(Fragment fragment, String argument) {
+        if (argument != null) {
+            Bundle args = new Bundle();
+            args.putString("ARGUMENT", argument);
+            fragment.setArguments(args);
+        }
+        getSupportFragmentManager().
+                beginTransaction().
+                setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out).
+                replace(R.id.theFrame, fragment).
+                commit();
     }
 }

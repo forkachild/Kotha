@@ -1,0 +1,55 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ListView
+        android:id="@+id/chatList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_weight="0.7"
+        android:clickable="false"
+        android:divider="#00FFFFFF"
+        android:dividerHeight="0dp"
+        android:listSelector="#00FFFFFF"
+        android:longClickable="false">
+
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/chatList"
+        android:background="#00FFFFFF"
+        android:orientation="horizontal"
+        android:paddingTop="5dp">
+
+        <EditText
+            android:id="@+id/txtText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.8"
+            android:background="@drawable/text_box"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:hint="Type a text"
+            android:scrollbarStyle="outsideInset"
+            android:textColor="#AAFFFFFF" />
+
+        <Button
+            android:id="@+id/bSend"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="0.2"
+            android:background="@drawable/button"
+            android:text="SEND"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+</LinearLayout>

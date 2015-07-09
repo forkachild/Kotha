@@ -16,7 +16,7 @@
         android:paddingRight="23dp"
         android:paddingTop="7dp"
         android:text="Tu mile dil khile aur"
-        android:textColor="#FFFFFF"
+        android:textColor="#DDFFFFFF"
         android:textSize="15sp" />
 
 </RelativeLayout>

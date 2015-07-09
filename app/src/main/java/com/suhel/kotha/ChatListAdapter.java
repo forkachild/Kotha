@@ -9,21 +9,18 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-
-/**
- * Created by Suhel on 7/7/2015.
- */
+import java.util.Collections;
 
 public class ChatListAdapter extends BaseAdapter {
 
     private ArrayList<ListItem> chatMessages;
     private LayoutInflater chatInflater = null;
-    private Typeface roboto = null;
+    private Typeface typeface = null;
 
     public ChatListAdapter(Context context) {
         chatInflater = LayoutInflater.from(context);
-        chatMessages = new ArrayList<ListItem>();
-        roboto = Typeface.createFromAsset(context.getAssets(), "roboto-medium.ttf");
+        chatMessages = new ArrayList<>();
+        typeface = Typeface.createFromAsset(context.getAssets(), "roboto-medium.ttf");
     }
 
     public void add(ListItem object) {
@@ -31,8 +28,7 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     public void addMultiple(ListItem[] objects) {
-        for (int i = 0; i < objects.length; i++)
-            chatMessages.add(objects[i]);
+        Collections.addAll(chatMessages, objects);
     }
 
     public void clear() {
@@ -69,7 +65,7 @@ public class ChatListAdapter extends BaseAdapter {
 
         theHolder.tvText = (TextView) convertView.findViewById(R.id.theText);
 
-        theHolder.tvText.setTypeface(roboto);
+        theHolder.tvText.setTypeface(typeface);
         theHolder.tvText.setText(theItem.text);
 
         return convertView;
