@@ -1,7 +1,18 @@
 package com.suhel.kotha;
+
+import com.parse.ParseUser;
+
 public interface BaseCallback {
 
     void actionTitle(String title, String subTitle);
+
+    void loadChatMessages(String username);
+
+    void loadChatFragment(String username);
+
+    void sendChatMessage(String username, String message);
+
+    void loadChatListItems();
 
     void loadSignup();
 

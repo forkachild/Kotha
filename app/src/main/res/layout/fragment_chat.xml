@@ -37,7 +37,7 @@
             android:paddingRight="10dp"
             android:hint="Type a text"
             android:scrollbarStyle="outsideInset"
-            android:textColor="#AAFFFFFF" />
+            android:textColor="#AA000000" />
 
         <Button
             android:id="@+id/bSend"

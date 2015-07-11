@@ -8,41 +8,51 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class ChatListAdapter extends BaseAdapter {
 
-    private ArrayList<ListItem> chatMessages;
+    private List<ChatListItem> chatListItems;
     private LayoutInflater chatInflater = null;
-    private Typeface typeface = null;
+    private Typeface typeface_thin, typeface_light;
 
     public ChatListAdapter(Context context) {
         chatInflater = LayoutInflater.from(context);
-        chatMessages = new ArrayList<>();
-        typeface = Typeface.createFromAsset(context.getAssets(), "roboto-medium.ttf");
+        chatListItems = new ArrayList<>();
+        typeface_thin = Typeface.createFromAsset(context.getAssets(), "roboto-thin.ttf");
+        typeface_light = Typeface.createFromAsset(context.getAssets(), "roboto-light.ttf");
     }
 
-    public void add(ListItem object) {
-        chatMessages.add(object);
+    public void add(ChatListItem object) {
+        chatListItems.add(object);
     }
 
-    public void addMultiple(ListItem[] objects) {
-        Collections.addAll(chatMessages, objects);
+    public void addMultiple(ChatListItem[] objects) {
+        Collections.addAll(chatListItems, objects);
+    }
+
+
+    public void addMultiple(List<ChatListItem> objects) {
+        for(ChatListItem item : objects)
+            chatListItems.add(item);
     }
 
     public void clear() {
-        chatMessages.clear();
+        chatListItems.clear();
     }
 
     @Override
     public int getCount() {
-        return chatMessages.size();
+        return chatListItems.size();
     }
 
     @Override
-    public ListItem getItem(int position) {
-        return chatMessages.get(position);
+    public ChatListItem getItem(int position) {
+        return chatListItems.get(position);
     }
 
     @Override
@@ -54,36 +64,39 @@ public class ChatListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder theHolder;
-        ListItem theItem = chatMessages.get(position);
+        ChatListItem theItem = chatListItems.get(position);
 
         theHolder = new ViewHolder();
 
-        if (theItem.direction)
-            convertView = chatInflater.inflate(R.layout.chat_message_me, parent, false);
+        convertView = chatInflater.inflate(R.layout.chat_list_item, parent, false);
+
+        theHolder.tvChatListItemName = (TextView) convertView.findViewById(R.id.tvChatListItemName);
+        theHolder.tvChatListItemMessage = (TextView) convertView.findViewById(R.id.tvChatListItemMessage);
+
+        theHolder.tvChatListItemName.setTypeface(typeface_thin);
+        theHolder.tvChatListItemMessage.setTypeface(typeface_light);
+        theHolder.tvChatListItemName.setText(theItem.text);
+        if (theItem.message == null)
+            theHolder.tvChatListItemMessage.setText("");
         else
-            convertView = chatInflater.inflate(R.layout.chat_message_you, parent, false);
-
-        theHolder.tvText = (TextView) convertView.findViewById(R.id.theText);
-
-        theHolder.tvText.setTypeface(typeface);
-        theHolder.tvText.setText(theItem.text);
+            theHolder.tvChatListItemMessage.setText(theItem.message);
 
         return convertView;
     }
 
     class ViewHolder {
-        TextView tvText;
+        TextView tvChatListItemName, tvChatListItemMessage;
     }
+
 }
 
-class ListItem {
+class ChatListItem {
 
-    public String text;
-    public boolean direction;
+    public String text, message;
 
-    public ListItem(String txt, boolean dir) {
+    public ChatListItem(String txt, String msg) {
         text = txt;
-        direction = dir;
+        message = msg;
     }
 
 }
